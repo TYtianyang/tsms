@@ -10,6 +10,7 @@ HSARMA.auto = function(X,W=NULL,U,p_range,q_range,r=1,S=NULL,
   if (is.null(S)){
     S = suggest(X,level)
   }
+  S = unique(S[(S>(max(p_range,q_range)+blur.out[2]))&(S<(U-blur.out[1]))])
   
   # step 3: prune seasonality
   S.nat = sort(S)
