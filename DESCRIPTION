@@ -1,0 +1,14 @@
+Package: tsms
+Title: Modeling Univariate Time Series with Multiple Seasonality
+Version: 0.0.1
+Date: 2019-10-04
+Authors@R: c(person("Tianyang", "Xie", email = "xie00039@umn.edu", role = c("aut","cre")),person("Jie", "Ding", email = "dingj@umn.edu", role = c("aut")))
+Description: Finds the optimal decomposition of univariate time series. Provide better 1-step ahead prediction than short term methods, and comparable n-step ahead prediction to non-parametric methods.
+License: GPL-3
+Encoding: UTF-8
+LazyData: true
+Imports: Rcpp (>= 1.0.0), MASS,rlang
+Depends: ggplot2, gridExtra, parallel
+LinkingTo: Rcpp, RcppArmadillo
+Suggests: knitr,rmarkdown,prophet
+VignetteBuilder: knitr
