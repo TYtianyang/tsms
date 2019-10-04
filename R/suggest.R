@@ -9,7 +9,6 @@ suggest = function(X,level=0.05){
   spy = spy[p.value<=level]
   fmin = min(diff(spec$freq))
   S = round(1/spx)
-  S = unique(S[(S>(max(c(p_range,q_range))+max(blur.out)))&(S<(U-max(blur.out)))])
   
   ind = diff(1/S)<(2*fmin)
   if (sum(ind)>0){
