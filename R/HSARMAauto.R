@@ -62,6 +62,7 @@ HSARMA.auto = function(X,W=NULL,U,p_range,q_range,r=1,S=NULL,
       if (sfactor){
         start = as.numeric(sfourier)*order*2
         base.vec = rep(0,nrow(X)+pred_t)
+        base.vec[1+S*(c(1:floor((nrow(X)+pred_t)/S))-1)] = 1
         for (j in 1:S){
           sea[start+j,] = c(rep(0,j-1),base.vec[1:(nrow(X)+pred_t-j+1)])
         }
