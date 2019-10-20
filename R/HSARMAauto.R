@@ -9,7 +9,7 @@ HSARMA.auto = function(X,W=NULL,U,p_range,q_range,r=1,S=NULL,
 
   # step 2: suggest seasonality
   if (is.null(S)){
-    S = suggest(X,r+2,level)
+    S = suggest(X,level)
   }
   S = unique(S[(S>(max(p_range,q_range)+blur.out[2]))&(S<(U-blur.out[1]))])
 
