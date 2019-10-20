@@ -1,4 +1,4 @@
-suggest = function(X,order=NULL,level=0.05){
+suggest = function(X,level=0.05){
 
   spec = spectrum(X,log='no',plot=FALSE)
   spx = spec$freq
@@ -7,7 +7,7 @@ suggest = function(X,order=NULL,level=0.05){
   p.value = 2*(1-pnorm(abs(z.score)))
   spx = spx[p.value<=level]
   spy = spy[p.value<=level]
-  S = round(1/spx)[order(spy,decreasing=T)[1:ifelse(is.null(order),length(spy),min(length(spy),order))]]
+  S = round(1/spx)
 
   return(sort(S))
 }
