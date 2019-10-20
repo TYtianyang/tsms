@@ -54,7 +54,7 @@ FSARMA.fit =function(X,U,p,q,S1,S2,W=NULL,crit='AIC'){
       ic = -2*mdl + (nrow(X)^(2/3))*(sum(1/c(1:dim)))
     }
 
-    ult = list(U,p,phi,q,psi,r1,S1,tau1,r2,S2,tau2,gamma,sigma,ic)
+    ult = list(U,p,phi,q,psi,r1,S1,tau1,r2,S2,tau2,gamma,sigma,dim,ic)
   },error=function(cond){
     if (p>0){phi=rep(0,p)
     }else{phi=NULL}
@@ -66,9 +66,10 @@ FSARMA.fit =function(X,U,p,q,S1,S2,W=NULL,crit='AIC'){
     }else{tau2=NULL}
     if (!is.null(d)){gamma=rep(0,d)
     }else{gamma=NULL}
+    dim = (p+q+length(S1.int)+length(S2.int)+ifelse(is.null(W),0,d))
     sigma = 1
     ic = Inf
-    ult = list(U,p,phi,q,psi,r1,S1,tau1,r2,S2,tau2,gamma,sigma,ic)
+    ult = list(U,p,phi,q,psi,r1,S1,tau1,r2,S2,tau2,gamma,sigma,dim,ic)
     # message(paste(c("Failure of fitting:    ",
     #                 'p=',p,' ','q=',q,' ',
     #                 'S1=c(',paste(S1,collapse=','),') ',
@@ -77,7 +78,7 @@ FSARMA.fit =function(X,U,p,q,S1,S2,W=NULL,crit='AIC'){
   })
 
   names(ult) = c('U','p','phi','q','psi','r1','S1','tau1','r2','S2','tau2','gamma',
-                 'sigma','ic')
+                 'sigma','dim','ic')
   return(ult)
 
 }
