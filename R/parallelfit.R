@@ -14,6 +14,7 @@ parallel.fit = function(X,W.list,para_panel,U,crit,multicore=F){
 
       m = FSARMA.fit(X,U,p,q,S1,S2,W.temp,crit)
       para_panel[i,6] = m$ic
+      para_panel[i,7] = m$dim
     }
 
   }else{
@@ -38,7 +39,8 @@ parallel.fit = function(X,W.list,para_panel,U,crit,multicore=F){
 
     singleFit = function(core_ind,assign_list,para_panel){
       index_set = assign_list[[core_ind]]
-      aic_set = rep(0,length(index_set))
+      ic_set = rep(0,length(index_set))
+      dim_set = rep(0,length(index_set))
       for (i in 1:length(index_set)){
         index = index_set[i]
         temp_row = para_panel[index,]
@@ -52,9 +54,12 @@ parallel.fit = function(X,W.list,para_panel,U,crit,multicore=F){
 
         m = FSARMA.fit(X,U,p,q,S1,S2,W.temp,crit)
         ic = m$ic
+        dim = m$dim
         ic_set[i] = ic
+        dim_set[i] = dim
       }
-      return(ic_set)
+      output = list(ic_set=ic_set,dim_set=dim_set)
+      return(output)
     }
 
     clusterExport(cl, list("FSARMA.fit","FSARMA.pred", "rbindlist","singleFit", "assign_list"
@@ -62,8 +67,16 @@ parallel.fit = function(X,W.list,para_panel,U,crit,multicore=F){
                   , envir=environment())
     pout = parLapply(cl, c(1:ncores), singleFit, assign_list=assign_list
                      ,para_panel=para_panel)
-    ic_col = unlist(pout)
+    ic.list = list()
+    dim.list = list()
+    for (i in 1:length(pout)){
+      ic.list[[i]] = pout[[i]][[1]]
+      dim.list[[i]] = pout[[i]][[2]]
+    }
+    ic_col = unlist(ic.list)
+    dim_col = unlist(dim.list)
     para_panel[,6] = ic_col
+    para_panel[,7] = dim_col
     stopCluster(cl)
   }
 
