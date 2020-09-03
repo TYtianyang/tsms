@@ -8,7 +8,7 @@ License: GPL-3
 Encoding: UTF-8
 LazyData: true
 Imports: Rcpp (>= 1.0.0), MASS,rlang
-Depends: ggplot2, gridExtra, parallel
+Depends: gridExtra, parallel
 LinkingTo: Rcpp, RcppArmadillo
 Suggests: knitr,rmarkdown,prophet
 VignetteBuilder: knitr
