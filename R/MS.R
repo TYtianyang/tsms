@@ -1,4 +1,4 @@
-HSARMA.auto = function(X,W=NULL,U,p_range,q_range,r=1,S=NULL,
+MS = function(X,W=NULL,U,p_range,q_range,r=1,S=NULL,
                        blur.out=c(2,2),sar=T,sma=T,
                        sfourier=F,order=1,
                        sfactor=F,pred_t=0,
@@ -121,8 +121,8 @@ HSARMA.auto = function(X,W=NULL,U,p_range,q_range,r=1,S=NULL,
   if (is.na(best.row[1,4])){S2=NULL
   }else{S2 = as.integer(strsplit(best.row[1,4],' ')[[1]])}
   W.temp = rbindlist(W.list,best.row[1,5])
-  best.m = FSARMA.fit(X,U,p,q,S1,S2,W.temp,crit)
-  prediction = FSARMA.pred(best.m,X,W.temp,pred_t)
+  best.m = garma.fit(X,U,p,q,S1,S2,W.temp,crit)
+  prediction = garma.pred(best.m,X,W.temp,pred_t)
 
   output = list(obj=best.m,ic_panel=para_panel,prediction=prediction)
 }
