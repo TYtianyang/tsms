@@ -1,5 +1,5 @@
 # freq fitting
-FSARMA.fit =function(X,U,p,q,S1,S2,W=NULL,crit='AIC'){
+garma.fit =function(X,U,p,q,S1,S2,W=NULL,crit='AIC'){
 
   if (is.null(W)){
     W = t(as.matrix(rep(0,nrow(X))))
