@@ -1,5 +1,9 @@
 # freq fitting
 garma.fit =function(X,U,p,q,S1,S2,W=NULL,crit='AIC'){
+  
+  if (dim(X)==1){
+    X = as.matrix(X)
+  }
 
   if (is.null(W)){
     W = t(as.matrix(rep(0,nrow(X))))
