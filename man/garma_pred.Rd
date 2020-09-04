@@ -1,27 +1,27 @@
-\name{FSARMA.pred}
-\alias{FSARMA.pred}
+\name{garma.pred}
+\alias{garma.pred}
 
 \title{
-Predict on fitted Seasonal ARMA
+Predict generalized ARMA
 }
 
 \description{
-Predict on fitted Seasonal ARMA
+Predict the fitted generalized ARMA model.
 }
 
 \usage{
-FSARMA.pred(obj,X,W=NULL,pred_t)
+garma.pred(obj,X,W=NULL,pred_t)
 }
 
 \arguments{
 
-\item{obj}{best fitted FSARMA.fit object}
+\item{obj}{the fitted ARMA model object}
 
-\item{X}{data vector or n by 1 matrix}
+\item{X}{a data vector or n by 1 matrix}
 
-\item{W}{exogenous matrix p by (n+pred_t) matrix}
+\item{W}{exogenous variable matrix p by (n+pred_t) matrix}
 
-\item{pred_t}{n-outsample prediction}
+\item{pred_t}{n-outsample prediction length}
 }
 
 \details{
