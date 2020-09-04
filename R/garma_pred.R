@@ -1,5 +1,5 @@
 # freq predict
-FSARMA.pred = function(obj,X,W=NULL,pred_t){
+garma.pred = function(obj,X,W=NULL,pred_t){
   
   # correct pred_t & W
   if (is.null(W)){
