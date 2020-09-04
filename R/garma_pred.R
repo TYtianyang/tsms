@@ -1,6 +1,10 @@
 # freq predict
 garma.pred = function(obj,X,W=NULL,pred_t){
   
+  if (dim(X)==1){
+    X = as.matrix(X) 
+  }
+  
   # correct pred_t & W
   if (is.null(W)){
     W = t(as.matrix(rep(0,nrow(X)+pred_t)))
