@@ -6,20 +6,23 @@
   Modeling Univariate Time Series with Multiple Seasonality
 }
 \description{
-  This package combines seasonality detection and best fitting via extended seasonal ARMA model. It tends to achieve satisfactory 1-step ahead prediction comparing to regular ARMA model, and a comparable n-step ahead prediction regarding to non-parametric seasonal models.
+  This package introduces a tool box for generalized ARMA model, as well as the MS modeling procedure for modeling univariate time series with multiple seasonality.
 }
 \details{
-  The package is beta version. The core function is HSARMA.auto
+  The tool box of generalized ARMA model consists of core functions: 'garma.fit()', 'garma.pred()', 'garma.gen()'.
+  The MS modeling procedure utilize the function: 'MS()'.
 }
 \author{
 Maintainer: Tianyang Xie <xie00039@umn.edu>
+Co-author: Jie Ding <dingj@umn.edu>
 }
 \references{
-  T. Xie, J. Ding, "Time series modeling with multiple seasonality," in preparation.
+  T. Xie, J. Ding, "Forecasting with Multiple Seasonality ," submitted to IEEE Big Data 2020.
 }
 \link{
-  FSARMA.fit
-  FSARMA.pred
-  HSARMA.auto
+  garma.fit
+  garma.pred
+  garma.gen
+  MS
 }
 
