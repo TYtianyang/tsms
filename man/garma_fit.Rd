@@ -9,7 +9,7 @@ Fit a generalized ARMA model for univariate time series. The ARMA is generalized
 }
 
 \usage{
-garma.fit(X,U,p,q,S1,S2,W=NULL,k=2)
+garma.fit(X,U,p,q,S1,S2,W=NULL,crit='AIC')
 }
 
 \arguments{
@@ -27,7 +27,7 @@ garma.fit(X,U,p,q,S1,S2,W=NULL,k=2)
 
 \item{W}{exogenous variable matrix p by n}
 
-\item{k}{infromation criterion penalty factor. k=2 is AIC; k=-1 report CV error}
+\item{crit}{selection criterion. crit = c('BC','AIC','BIC')}
 }
 
 \details{
@@ -66,7 +66,7 @@ For models that have diverging estimation, the aic value will be recorded as Inf
 
 \item{sigma}{estimated sigma of white noise}
 
-\item{aic}{if k=2, AIC value; if k=-1, CV error}
+\item{ic}{information criterion}
 
 }
 
