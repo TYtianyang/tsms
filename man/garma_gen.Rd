@@ -44,6 +44,16 @@ Please note that the generator will automatically filter the generated series: t
 
 \value{
 \item{X}{generated series in a n by 1 matrix}
+  
+\item{p}{number of regular AR components}
+
+\item{q}{number of regular MA components}
+
+\item{S1}{a set of lag orders of additional AR components}
+
+\item{S2}{a set of lag orders of additional MA components}
+  
+\item{beta}{coefficients vector}
 }
 
 \author{
