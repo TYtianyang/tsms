@@ -1,4 +1,4 @@
-genTS = function(n,U,p,q,S1=NULL,S2=NULL,phi=NULL,psi=NULL,tau1=NULL,tau2=NULL,
+garma.gen = function(n,U,p,q,S1=NULL,S2=NULL,phi=NULL,psi=NULL,tau1=NULL,tau2=NULL,
                  noise=1){
   if (length(phi)==0){
     rand_phi = T
