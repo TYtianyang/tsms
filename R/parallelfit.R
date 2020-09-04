@@ -12,7 +12,7 @@ parallel.fit = function(X,W.list,para_panel,U,crit,multicore=F){
       }else{S2 = as.integer(strsplit(temp_row[1,4],' ')[[1]])}
       W.temp = rbindlist(W.list,temp_row[1,5])
 
-      m = FSARMA.fit(X,U,p,q,S1,S2,W.temp,crit)
+      m = garma.fit(X,U,p,q,S1,S2,W.temp,crit)
       para_panel[i,6] = m$ic
       para_panel[i,7] = m$dim
     }
