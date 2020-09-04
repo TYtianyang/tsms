@@ -52,7 +52,7 @@ parallel.fit = function(X,W.list,para_panel,U,crit,multicore=F){
         }else{S2 = as.integer(strsplit(temp_row[1,4],' ')[[1]])}
         W.temp = rbindlist(W.list,temp_row[1,5])
 
-        m = FSARMA.fit(X,U,p,q,S1,S2,W.temp,crit)
+        m = garma.fit(X,U,p,q,S1,S2,W.temp,crit)
         ic = m$ic
         dim = m$dim
         ic_set[i] = ic
@@ -62,7 +62,7 @@ parallel.fit = function(X,W.list,para_panel,U,crit,multicore=F){
       return(output)
     }
 
-    clusterExport(cl, list("FSARMA.fit","FSARMA.pred", "rbindlist","singleFit", "assign_list"
+    clusterExport(cl, list("garma.fit","garma.pred", "rbindlist","singleFit", "assign_list"
                            ,"para_panel","W.list","X","U","crit")
                   , envir=environment())
     pout = parLapply(cl, c(1:ncores), singleFit, assign_list=assign_list
