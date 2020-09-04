@@ -1,4 +1,4 @@
 useDynLib(tsms, .registration=TRUE)
-export(garma.fit,garma.pred,garma.gen,MS,suggest)
+export(garma.fit,garma.pred,garma.gen,MS)
 importFrom(Rcpp, evalCpp)
 import(MASS,parallel)
