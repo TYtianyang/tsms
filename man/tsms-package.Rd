@@ -17,7 +17,7 @@ Maintainer: Tianyang Xie <xie00039@umn.edu>
 Co-author: Jie Ding <dingj@umn.edu>
 }
 \references{
-  T. Xie, J. Ding, "Forecasting with Multiple Seasonality ," submitted to IEEE Big Data 2020.
+  T. Xie, J. Ding, "Forecasting with Multiple Seasonality ," https://arxiv.org/abs/2008.12340.
 }
 
 
