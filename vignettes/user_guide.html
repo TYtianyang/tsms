@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<meta name="author" content="Tianyang Xie" />
+
+<meta name="date" content="2020-09-04" />
+
+<title>Explore generalized ARMA with the tsms R Pacakge</title>
+
+<script>// Hide empty <a> tag within highlighted CodeBlock for screen reader accessibility (see https://github.com/jgm/pandoc/issues/6352#issuecomment-626106786) -->
+// v0.0.1
+// Written by JooYoung Seo (jooyoung@psu.edu) and Atsushi Yasumoto on June 1st, 2020.
+
+document.addEventListener('DOMContentLoaded', function() {
+  const codeList = document.getElementsByClassName("sourceCode");
+  for (var i = 0; i < codeList.length; i++) {
+    var linkList = codeList[i].getElementsByTagName('a');
+    for (var j = 0; j < linkList.length; j++) {
+      if (linkList[j].innerHTML === "") {
+        linkList[j].setAttribute('aria-hidden', 'true');
+      }
+    }
+  }
+});
+</script>
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css" data-origin="pandoc">
+code.sourceCode > span { display: inline-block; line-height: 1.25; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Explore generalized ARMA with the tsms R Pacakge</h1>
+<h4 class="author">Tianyang Xie</h4>
+<h4 class="date">09/04/2020</h4>
+
+
+
+<p>This vignette gives a high level overview on how to use the ‘tsms’ R package. The R package consists of a tool box for generalized ARMA model, as well as the MS modeling procedure for univariate time series with multiple seasonality.</p>
+<div id="installation" class="section level2">
+<h2>Installation</h2>
+<p>The installation of ‘tsms’ involves using ‘devtools’ package. Run the following code to load ‘devtools’, and then install ‘tsms’ from the github repository. Note that for R version &gt; 4.0.0 users, older version of dependent packages (e.g. gridExtra) would throw out warnings through the installation. We added a command line in the following code to avoid auto-converting warnings into errors.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">install.packages</span>(<span class="st">&quot;devtools&quot;</span>)</span>
+<span id="cb1-2"><a href="#cb1-2"></a><span class="kw">library</span>(<span class="st">&quot;devtools&quot;</span>)</span>
+<span id="cb1-3"><a href="#cb1-3"></a><span class="kw">Sys.setenv</span>(<span class="st">&quot;R_REMOTES_NO_ERRORS_FROM_WARNINGS&quot;</span> =<span class="st"> &quot;true&quot;</span>) <span class="co"># avoid auto-converting warnings into errors</span></span>
+<span id="cb1-4"><a href="#cb1-4"></a><span class="kw">install_github</span>(<span class="st">&#39;TYtianyang/tsms&#39;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a><span class="kw">library</span>(tsms)</span>
+<span id="cb2-2"><a href="#cb2-2"></a><span class="co">#&gt; Loading required package: gridExtra</span></span>
+<span id="cb2-3"><a href="#cb2-3"></a><span class="co">#&gt; Loading required package: parallel</span></span></code></pre></div>
+</div>
+<div id="generalized-arma" class="section level2">
+<h2>Generalized ARMA</h2>
+<p>The regular ARMA model consists of AR and MA components with continued lagging orders. For example, a regular ARMA(p,q) model could be written as:</p>
+<p><span class="math display">\[\begin{equation}
+  X_t = \sum_{i=1}^p \phi_{i} * X_{t-i} + \sum_{j=1}^q \psi_{j} *\epsilon_{t-j} + \epsilon_t \notag
+\end{equation}\]</span></p>
+<p><span class="math inline">\(X_t\)</span> is the data at time point t, <span class="math inline">\(\phi_i\)</span> is the coefficient for AR component at lag i, <span class="math inline">\(\psi_j\)</span> is the coefficient for MA component at lag j, <span class="math inline">\(\epsilon_t\)</span> is the white noise at time point t. For the rest of the discussion, we assume the white noise following normal distribution.</p>
+<p>As the name suggested, the generalized ARMA model doesn’t require AR and MA components with continued lagging orders. Any set of lagging orders for AR and MA components would be allowed. The generalized ARMA that have AR components with lagging set S1, and MA components with lagging set S2 can be written as the following:</p>
+<p><span class="math display">\[\begin{equation}
+  X_t = \sum_{i \in S_1} \phi_{i} * X_{t-i} + \sum_{j \in S_2} \psi_{j} *\epsilon_{t-j} + \epsilon_t \notag
+\end{equation}\]</span></p>
+<p>Our R package ‘tsms’ offers 3 useful functions for the generalized ARMA model: ‘garma.fit’ for fitting the model on a data series, ‘garma.pred’ for predicting on a fitted model, and ‘garma.gen’ for generating a data series with specified parameters. Let’s elaborate their usage by some examples.</p>
+<p>Consider a generalized ARMA model with specified parameters as follwing: <span class="math display">\[\begin{equation}
+  X_t = 0.5 X_{t-1} - 0.2 X_{t-2} + 0.3 \epsilon_{t-1} + (0.1 X_{t-15} - 0.05 X_{t-20}) + (0.1 \epsilon_{t-10}) + \epsilon_t,\sigma = 2 \notag
+\end{equation}\]</span></p>
+<p>We can generate a time series with length 1000 from the generalized ARMA model above by using ‘garma.gen’ function:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a>data.ts.garma =<span class="st"> </span><span class="kw">garma.gen</span>(<span class="dt">n=</span><span class="dv">1000</span>,<span class="dt">U=</span><span class="dv">100</span>,</span>
+<span id="cb3-2"><a href="#cb3-2"></a>              <span class="dt">p=</span><span class="dv">2</span>,<span class="dt">q=</span><span class="dv">1</span>,<span class="dt">S1=</span><span class="kw">c</span>(<span class="dv">15</span>,<span class="dv">20</span>),<span class="dt">S2=</span><span class="kw">c</span>(<span class="dv">10</span>),</span>
+<span id="cb3-3"><a href="#cb3-3"></a>              <span class="dt">phi=</span><span class="kw">c</span>(<span class="fl">0.5</span>,<span class="op">-</span><span class="fl">0.2</span>),<span class="dt">psi=</span><span class="kw">c</span>(<span class="fl">0.3</span>),<span class="dt">tau1=</span><span class="kw">c</span>(<span class="fl">0.5</span>,<span class="op">-</span><span class="fl">0.2</span>),<span class="dt">tau2=</span><span class="fl">0.1</span>,</span>
+<span id="cb3-4"><a href="#cb3-4"></a>              <span class="dt">noise=</span><span class="fl">0.2</span>)<span class="op">$</span>X</span></code></pre></div>
+<p>Note that ‘garma.gen’ return a list of objects. By calling ‘X’ from it, the generated data can be obtained. X will be a vector with length 1000. ‘garma.gen’ function doesn’t require the stationarity for the generated time series. However, it does filter out some of the generated results so that the generated series won’t diverge drastically in the end.</p>
+<p>Also note that the parameter U controls the number of burn-in samples. For those burn-in samples, the data are generated from white noise process with standard deviation specified in noise parameter. Only the samples after U are generated from the generalized ARMA model. Therefore the distributions of burn-in samples and samples after integer U would be different.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a><span class="kw">plot</span>(data.ts.garma,<span class="dt">main=</span><span class="st">&#39;Generated Samples&#39;</span>,<span class="dt">type=</span><span class="st">&#39;l&#39;</span>)</span>
+<span id="cb4-2"><a href="#cb4-2"></a><span class="kw">abline</span>(<span class="dt">v=</span><span class="dv">100</span>,<span class="dt">lty=</span><span class="dv">2</span>)</span></code></pre></div>
+<p><img src="data:image/png;base64,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" /><!-- --></p>
+<p>For generating a time series from a regular ARMA model, we can also utilize ‘garma.gen’ function. For example, for the following regular ARMA model:</p>
+<p><span class="math display">\[\begin{equation}
+  X_t = 0.5 X_{t-1} - 0.2 X_{t-2} + 0.3 \epsilon_{t-1} + \epsilon_t,\sigma = 2
+\end{equation}\]</span></p>
+<p>Use:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a>data.ts.arma =<span class="st"> </span><span class="kw">garma.gen</span>(<span class="dt">n=</span><span class="dv">1000</span>,<span class="dt">U=</span><span class="dv">100</span>,</span>
+<span id="cb5-2"><a href="#cb5-2"></a>              <span class="dt">p=</span><span class="dv">2</span>,<span class="dt">q=</span><span class="dv">1</span>,<span class="dt">S1=</span><span class="ot">NULL</span>,<span class="dt">S2=</span><span class="ot">NULL</span>,</span>
+<span id="cb5-3"><a href="#cb5-3"></a>              <span class="dt">phi=</span><span class="kw">c</span>(<span class="fl">0.5</span>,<span class="op">-</span><span class="fl">0.2</span>),<span class="dt">psi=</span><span class="kw">c</span>(<span class="fl">0.3</span>),<span class="dt">tau1=</span><span class="ot">NULL</span>,<span class="dt">tau2=</span><span class="ot">NULL</span>,</span>
+<span id="cb5-4"><a href="#cb5-4"></a>              <span class="dt">noise=</span><span class="fl">0.2</span>)<span class="op">$</span>X</span></code></pre></div>
+<p>For fitting a generalized ARMA model, we can use ‘garma.fit’ function.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a>model.ts.garma =<span class="st"> </span><span class="kw">garma.fit</span>(data.ts.garma[<span class="dv">1</span><span class="op">:</span><span class="dv">850</span>],<span class="dt">U=</span><span class="dv">100</span>,<span class="dt">p=</span><span class="dv">2</span>,<span class="dt">q=</span><span class="dv">1</span>,<span class="dt">S1=</span><span class="kw">c</span>(<span class="dv">15</span>,<span class="dv">20</span>),<span class="dt">S2=</span><span class="kw">c</span>(<span class="dv">10</span>),<span class="dt">crit=</span><span class="st">&#39;AIC&#39;</span>)</span>
+<span id="cb6-2"><a href="#cb6-2"></a><span class="kw">print</span>(model.ts.garma)</span>
+<span id="cb6-3"><a href="#cb6-3"></a><span class="co">#&gt; $U</span></span>
+<span id="cb6-4"><a href="#cb6-4"></a><span class="co">#&gt; [1] 100</span></span>
+<span id="cb6-5"><a href="#cb6-5"></a><span class="co">#&gt; </span></span>
+<span id="cb6-6"><a href="#cb6-6"></a><span class="co">#&gt; $p</span></span>
+<span id="cb6-7"><a href="#cb6-7"></a><span class="co">#&gt; [1] 2</span></span>
+<span id="cb6-8"><a href="#cb6-8"></a><span class="co">#&gt; </span></span>
+<span id="cb6-9"><a href="#cb6-9"></a><span class="co">#&gt; $phi</span></span>
+<span id="cb6-10"><a href="#cb6-10"></a><span class="co">#&gt; [1]  0.4981767 -0.2160539</span></span>
+<span id="cb6-11"><a href="#cb6-11"></a><span class="co">#&gt; </span></span>
+<span id="cb6-12"><a href="#cb6-12"></a><span class="co">#&gt; $q</span></span>
+<span id="cb6-13"><a href="#cb6-13"></a><span class="co">#&gt; [1] 1</span></span>
+<span id="cb6-14"><a href="#cb6-14"></a><span class="co">#&gt; </span></span>
+<span id="cb6-15"><a href="#cb6-15"></a><span class="co">#&gt; $psi</span></span>
+<span id="cb6-16"><a href="#cb6-16"></a><span class="co">#&gt; [1] 0.2284169</span></span>
+<span id="cb6-17"><a href="#cb6-17"></a><span class="co">#&gt; </span></span>
+<span id="cb6-18"><a href="#cb6-18"></a><span class="co">#&gt; $r1</span></span>
+<span id="cb6-19"><a href="#cb6-19"></a><span class="co">#&gt; [1] 2</span></span>
+<span id="cb6-20"><a href="#cb6-20"></a><span class="co">#&gt; </span></span>
+<span id="cb6-21"><a href="#cb6-21"></a><span class="co">#&gt; $S1</span></span>
+<span id="cb6-22"><a href="#cb6-22"></a><span class="co">#&gt; [1] 15 20</span></span>
+<span id="cb6-23"><a href="#cb6-23"></a><span class="co">#&gt; </span></span>
+<span id="cb6-24"><a href="#cb6-24"></a><span class="co">#&gt; $tau1</span></span>
+<span id="cb6-25"><a href="#cb6-25"></a><span class="co">#&gt; [1]  0.4627303 -0.2348281</span></span>
+<span id="cb6-26"><a href="#cb6-26"></a><span class="co">#&gt; </span></span>
+<span id="cb6-27"><a href="#cb6-27"></a><span class="co">#&gt; $r2</span></span>
+<span id="cb6-28"><a href="#cb6-28"></a><span class="co">#&gt; [1] 1</span></span>
+<span id="cb6-29"><a href="#cb6-29"></a><span class="co">#&gt; </span></span>
+<span id="cb6-30"><a href="#cb6-30"></a><span class="co">#&gt; $S2</span></span>
+<span id="cb6-31"><a href="#cb6-31"></a><span class="co">#&gt; [1] 10</span></span>
+<span id="cb6-32"><a href="#cb6-32"></a><span class="co">#&gt; </span></span>
+<span id="cb6-33"><a href="#cb6-33"></a><span class="co">#&gt; $tau2</span></span>
+<span id="cb6-34"><a href="#cb6-34"></a><span class="co">#&gt; [1] 0.07502258</span></span>
+<span id="cb6-35"><a href="#cb6-35"></a><span class="co">#&gt; </span></span>
+<span id="cb6-36"><a href="#cb6-36"></a><span class="co">#&gt; $gamma</span></span>
+<span id="cb6-37"><a href="#cb6-37"></a><span class="co">#&gt; [1] 0</span></span>
+<span id="cb6-38"><a href="#cb6-38"></a><span class="co">#&gt; </span></span>
+<span id="cb6-39"><a href="#cb6-39"></a><span class="co">#&gt; $sigma</span></span>
+<span id="cb6-40"><a href="#cb6-40"></a><span class="co">#&gt; [1] 0.1986553</span></span>
+<span id="cb6-41"><a href="#cb6-41"></a><span class="co">#&gt; </span></span>
+<span id="cb6-42"><a href="#cb6-42"></a><span class="co">#&gt; $dim</span></span>
+<span id="cb6-43"><a href="#cb6-43"></a><span class="co">#&gt; [1] 7</span></span>
+<span id="cb6-44"><a href="#cb6-44"></a><span class="co">#&gt; </span></span>
+<span id="cb6-45"><a href="#cb6-45"></a><span class="co">#&gt; $ic</span></span>
+<span id="cb6-46"><a href="#cb6-46"></a><span class="co">#&gt; [1] -281.868</span></span></code></pre></div>
+<p>Note that in the example above, we only utilized the former 850 points for training.</p>
+<p>The ‘garma.fit’ function returns a list of objects including the specified parameters and estimated coefficients. An information criterion value will also be recorded at the end of the list. One can also change the IC type to others such as ‘BIC’ or ‘BC’ by simply change the crit parameter.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a>model.ts.garma =<span class="st"> </span><span class="kw">garma.fit</span>(data.ts.garma[<span class="dv">1</span><span class="op">:</span><span class="dv">850</span>],<span class="dt">U=</span><span class="dv">100</span>,<span class="dt">p=</span><span class="dv">2</span>,<span class="dt">q=</span><span class="dv">1</span>,<span class="dt">S1=</span><span class="kw">c</span>(<span class="dv">15</span>,<span class="dv">20</span>),<span class="dt">S2=</span><span class="kw">c</span>(<span class="dv">10</span>),<span class="dt">crit=</span><span class="st">&#39;BIC&#39;</span>)</span>
+<span id="cb7-2"><a href="#cb7-2"></a>model.ts.garma =<span class="st"> </span><span class="kw">garma.fit</span>(data.ts.garma[<span class="dv">1</span><span class="op">:</span><span class="dv">850</span>],<span class="dt">U=</span><span class="dv">100</span>,<span class="dt">p=</span><span class="dv">2</span>,<span class="dt">q=</span><span class="dv">1</span>,<span class="dt">S1=</span><span class="kw">c</span>(<span class="dv">15</span>,<span class="dv">20</span>),<span class="dt">S2=</span><span class="kw">c</span>(<span class="dv">10</span>),<span class="dt">crit=</span><span class="st">&#39;BC&#39;</span>)</span></code></pre></div>
+<p>After fitting a model, we can pass on our fitted results to the prediction function ‘garma.pred’ to perform dynamic forecasting. For example, use the following code to perform 150 step forward forecasting.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a>pred.ts.garma =<span class="st"> </span><span class="kw">garma.pred</span>(model.ts.garma,<span class="dt">X=</span>data.ts.garma[<span class="dv">1</span><span class="op">:</span><span class="dv">850</span>],<span class="dt">pred_t=</span><span class="dv">150</span>)</span>
+<span id="cb8-2"><a href="#cb8-2"></a><span class="kw">plot</span>(data.ts.garma,<span class="dt">type=</span><span class="st">&#39;l&#39;</span>,<span class="dt">xlim=</span><span class="kw">c</span>(<span class="dv">800</span>,<span class="dv">1000</span>),<span class="dt">main=</span><span class="st">&#39;Generated TS v.s. Prediction&#39;</span>,<span class="dt">col=</span><span class="st">&#39;blue&#39;</span>)</span>
+<span id="cb8-3"><a href="#cb8-3"></a><span class="kw">lines</span>(pred.ts.garma,<span class="dt">col=</span><span class="st">&#39;red&#39;</span>)</span>
+<span id="cb8-4"><a href="#cb8-4"></a><span class="kw">abline</span>(<span class="dt">v=</span><span class="dv">850</span>)</span></code></pre></div>
+<p><img src="data:image/png;base64,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" /><!-- --></p>
+</div>
+<div id="ms-modeling-procedure-usage" class="section level2">
+<h2>MS modeling procedure: Usage</h2>
+<p>Another feature of the ‘tsms’ R package is the MS modeling procedure for univariate time series with multiple seasonality. Unlike the other methods for multiple seasonality setting, MS doesn’t require a pre-determined seasonality periods. It only needs to know how many seasonality cycles should be inferred from the data. The procedure will first suggest potential seasonality periods by performing a Discrete Fourier Transformation based on the number of seasonality periods. Then, it uses a parallel fitting module to fit generalized ARMA models for different parameters. Finally, it select the best model by minimizing IC value and perform forecasting.</p>
+<p>The following code gives an example of the basic usage of MS modeling procedure. It performs a MS procedure with AR and MA components limited to at most 3 lags, allowing 2 seasonality cycles in the data. The procedure utilized the former 850 points of the series, burned in 100 points in the beginning, and forecast for 150 steps ahead at last.</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a>result =<span class="st"> </span><span class="kw">MS</span>(<span class="dt">X=</span>data.ts.garma[<span class="dv">1</span><span class="op">:</span><span class="dv">850</span>],<span class="dt">U=</span><span class="dv">100</span>,<span class="dt">p_range=</span><span class="kw">c</span>(<span class="dv">0</span><span class="op">:</span><span class="dv">3</span>),<span class="dt">q_range=</span><span class="kw">c</span>(<span class="dv">0</span><span class="op">:</span><span class="dv">3</span>),<span class="dt">r=</span><span class="dv">2</span>,<span class="dt">pred_t=</span><span class="dv">150</span>)</span></code></pre></div>
+<p>The MS function outputs a list of objects: the best model object, the IC panel, and the prediction result.</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a><span class="kw">print</span>(<span class="kw">names</span>(result))</span>
+<span id="cb10-2"><a href="#cb10-2"></a><span class="co">#&gt; [1] &quot;obj&quot;        &quot;ic_panel&quot;   &quot;prediction&quot;</span></span>
+<span id="cb10-3"><a href="#cb10-3"></a><span class="kw">print</span>(result<span class="op">$</span>ic_panel)</span>
+<span id="cb10-4"><a href="#cb10-4"></a><span class="co">#&gt;    p q                        S1                        S2             W</span></span>
+<span id="cb10-5"><a href="#cb10-5"></a><span class="co">#&gt; 1  0 0 6 7 8 9 10 12 13 14 15 16 6 7 8 9 10 12 13 14 15 16 sea1 sea2 exo</span></span>
+<span id="cb10-6"><a href="#cb10-6"></a><span class="co">#&gt; 2  0 1 6 7 8 9 10 12 13 14 15 16 6 7 8 9 10 12 13 14 15 16 sea1 sea2 exo</span></span>
+<span id="cb10-7"><a href="#cb10-7"></a><span class="co">#&gt; 3  0 2 6 7 8 9 10 12 13 14 15 16 6 7 8 9 10 12 13 14 15 16 sea1 sea2 exo</span></span>
+<span id="cb10-8"><a href="#cb10-8"></a><span class="co">#&gt; 4  0 3 6 7 8 9 10 12 13 14 15 16 6 7 8 9 10 12 13 14 15 16 sea1 sea2 exo</span></span>
+<span id="cb10-9"><a href="#cb10-9"></a><span class="co">#&gt; 5  1 0 6 7 8 9 10 12 13 14 15 16 6 7 8 9 10 12 13 14 15 16 sea1 sea2 exo</span></span>
+<span id="cb10-10"><a href="#cb10-10"></a><span class="co">#&gt; 6  1 1 6 7 8 9 10 12 13 14 15 16 6 7 8 9 10 12 13 14 15 16 sea1 sea2 exo</span></span>
+<span id="cb10-11"><a href="#cb10-11"></a><span class="co">#&gt; 7  1 2 6 7 8 9 10 12 13 14 15 16 6 7 8 9 10 12 13 14 15 16 sea1 sea2 exo</span></span>
+<span id="cb10-12"><a href="#cb10-12"></a><span class="co">#&gt; 8  1 3 6 7 8 9 10 12 13 14 15 16 6 7 8 9 10 12 13 14 15 16 sea1 sea2 exo</span></span>
+<span id="cb10-13"><a href="#cb10-13"></a><span class="co">#&gt; 9  2 0 6 7 8 9 10 12 13 14 15 16 6 7 8 9 10 12 13 14 15 16 sea1 sea2 exo</span></span>
+<span id="cb10-14"><a href="#cb10-14"></a><span class="co">#&gt; 10 2 1 6 7 8 9 10 12 13 14 15 16 6 7 8 9 10 12 13 14 15 16 sea1 sea2 exo</span></span>
+<span id="cb10-15"><a href="#cb10-15"></a><span class="co">#&gt; 11 2 2 6 7 8 9 10 12 13 14 15 16 6 7 8 9 10 12 13 14 15 16 sea1 sea2 exo</span></span>
+<span id="cb10-16"><a href="#cb10-16"></a><span class="co">#&gt; 12 2 3 6 7 8 9 10 12 13 14 15 16 6 7 8 9 10 12 13 14 15 16 sea1 sea2 exo</span></span>
+<span id="cb10-17"><a href="#cb10-17"></a><span class="co">#&gt; 13 3 0 6 7 8 9 10 12 13 14 15 16 6 7 8 9 10 12 13 14 15 16 sea1 sea2 exo</span></span>
+<span id="cb10-18"><a href="#cb10-18"></a><span class="co">#&gt; 14 3 1 6 7 8 9 10 12 13 14 15 16 6 7 8 9 10 12 13 14 15 16 sea1 sea2 exo</span></span>
+<span id="cb10-19"><a href="#cb10-19"></a><span class="co">#&gt; 15 3 2 6 7 8 9 10 12 13 14 15 16 6 7 8 9 10 12 13 14 15 16 sea1 sea2 exo</span></span>
+<span id="cb10-20"><a href="#cb10-20"></a><span class="co">#&gt; 16 3 3 6 7 8 9 10 12 13 14 15 16 6 7 8 9 10 12 13 14 15 16 sea1 sea2 exo</span></span>
+<span id="cb10-21"><a href="#cb10-21"></a><span class="co">#&gt;          ic dim</span></span>
+<span id="cb10-22"><a href="#cb10-22"></a><span class="co">#&gt; 1  434.8746  21</span></span>
+<span id="cb10-23"><a href="#cb10-23"></a><span class="co">#&gt; 2  131.2043  22</span></span>
+<span id="cb10-24"><a href="#cb10-24"></a><span class="co">#&gt; 3  104.9349  23</span></span>
+<span id="cb10-25"><a href="#cb10-25"></a><span class="co">#&gt; 4  108.6736  24</span></span>
+<span id="cb10-26"><a href="#cb10-26"></a><span class="co">#&gt; 5  231.0613  22</span></span>
+<span id="cb10-27"><a href="#cb10-27"></a><span class="co">#&gt; 6  127.9759  23</span></span>
+<span id="cb10-28"><a href="#cb10-28"></a><span class="co">#&gt; 7  104.0469  24</span></span>
+<span id="cb10-29"><a href="#cb10-29"></a><span class="co">#&gt; 8  107.2597  25</span></span>
+<span id="cb10-30"><a href="#cb10-30"></a><span class="co">#&gt; 9  111.6608  23</span></span>
+<span id="cb10-31"><a href="#cb10-31"></a><span class="co">#&gt; 10 112.8165  24</span></span>
+<span id="cb10-32"><a href="#cb10-32"></a><span class="co">#&gt; 11 107.6361  25</span></span>
+<span id="cb10-33"><a href="#cb10-33"></a><span class="co">#&gt; 12 110.7109  26</span></span>
+<span id="cb10-34"><a href="#cb10-34"></a><span class="co">#&gt; 13 115.3996  24</span></span>
+<span id="cb10-35"><a href="#cb10-35"></a><span class="co">#&gt; 14 115.9309  25</span></span>
+<span id="cb10-36"><a href="#cb10-36"></a><span class="co">#&gt; 15 115.0463  26</span></span>
+<span id="cb10-37"><a href="#cb10-37"></a><span class="co">#&gt; 16 111.3878  27</span></span></code></pre></div>
+<p>The prediction result compares to the original series by the following codes.</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a><span class="kw">plot</span>(data.ts.garma,<span class="dt">type=</span><span class="st">&#39;l&#39;</span>,<span class="dt">xlim=</span><span class="kw">c</span>(<span class="dv">800</span>,<span class="dv">1000</span>),<span class="dt">main=</span><span class="st">&#39;Generated TS v.s. MS&#39;</span>,<span class="dt">col=</span><span class="st">&#39;blue&#39;</span>)</span>
+<span id="cb11-2"><a href="#cb11-2"></a><span class="kw">lines</span>(result<span class="op">$</span>prediction,<span class="dt">col=</span><span class="st">&#39;red&#39;</span>)</span>
+<span id="cb11-3"><a href="#cb11-3"></a><span class="kw">abline</span>(<span class="dt">v=</span><span class="dv">850</span>)</span></code></pre></div>
+<p><img src="data:image/png;base64,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" /><!-- --></p>
+<p>In general, the parameters ‘p_range’,‘q_range’ and ‘r’ would be the most important parameters for the MS. But MS modeling procedure also has many other parameters so that the users can play with them to fully explore the flexibility of the method.</p>
+<p>By setting the parameter ‘blur.out’ to a different value, we can allow the procedure to select the best model on a wider bandwidth of seasonality components. For example, we allow ‘blur.out’ to be ‘c(3,3)’ in the following, so that the procedure will also consider including the AR and MA components with lag-3 and lag+3 for each seasonality order. The default value for ‘blur.out’ is ‘c(2,2)’</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a>result =<span class="st"> </span><span class="kw">MS</span>(<span class="dt">X=</span>data.ts.garma[<span class="dv">1</span><span class="op">:</span><span class="dv">850</span>],<span class="dt">U=</span><span class="dv">100</span>,<span class="dt">p_range=</span><span class="kw">c</span>(<span class="dv">0</span><span class="op">:</span><span class="dv">3</span>),<span class="dt">q_range=</span><span class="kw">c</span>(<span class="dv">0</span><span class="op">:</span><span class="dv">3</span>),<span class="dt">r=</span><span class="dv">2</span>,<span class="dt">pred_t=</span><span class="dv">150</span>,<span class="dt">blur.out=</span><span class="kw">c</span>(<span class="dv">3</span>,<span class="dv">3</span>))</span></code></pre></div>
+<p>By setting the parameter ‘sar,sma’ to different logical values, we control the procedure whether to include generalized AR or MA components. For example, we avoid the generalized MA components to be included in the following code.</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1"></a>result =<span class="st"> </span><span class="kw">MS</span>(<span class="dt">X=</span>data.ts.garma[<span class="dv">1</span><span class="op">:</span><span class="dv">850</span>],<span class="dt">U=</span><span class="dv">100</span>,<span class="dt">p_range=</span><span class="kw">c</span>(<span class="dv">0</span><span class="op">:</span><span class="dv">3</span>),<span class="dt">q_range=</span><span class="kw">c</span>(<span class="dv">0</span><span class="op">:</span><span class="dv">3</span>),<span class="dt">r=</span><span class="dv">2</span>,<span class="dt">sma=</span>F)</span></code></pre></div>
+<p>We can also change the selecting criterion by setting ‘crit’ to a different IC. There are three options for this parameter: ‘AIC’, ‘BIC’, and ‘BC’. The default is ‘BC’.</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a>result =<span class="st"> </span><span class="kw">MS</span>(<span class="dt">X=</span>data.ts.garma[<span class="dv">1</span><span class="op">:</span><span class="dv">850</span>],<span class="dt">U=</span><span class="dv">100</span>,<span class="dt">p_range=</span><span class="kw">c</span>(<span class="dv">0</span><span class="op">:</span><span class="dv">3</span>),<span class="dt">q_range=</span><span class="kw">c</span>(<span class="dv">0</span><span class="op">:</span><span class="dv">3</span>),<span class="dt">r=</span><span class="dv">2</span>,<span class="dt">crit=</span><span class="st">&#39;BC&#39;</span>)</span></code></pre></div>
+<p>In the end, one can shut down the parallel computing function by setting ‘multicore=F’. The procedure will then perform fitting on each generalized ARMA model one by one. In most of the situation, it will raise the computational cost thus not recommended.</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1"></a>result =<span class="st"> </span><span class="kw">MS</span>(<span class="dt">X=</span>data.ts.garma[<span class="dv">1</span><span class="op">:</span><span class="dv">850</span>],<span class="dt">U=</span><span class="dv">100</span>,<span class="dt">p_range=</span><span class="kw">c</span>(<span class="dv">0</span><span class="op">:</span><span class="dv">3</span>),<span class="dt">q_range=</span><span class="kw">c</span>(<span class="dv">0</span><span class="op">:</span><span class="dv">3</span>),<span class="dt">r=</span><span class="dv">2</span>,<span class="dt">multicore=</span>F)</span></code></pre></div>
+</div>
+<div id="ms-modeling-procedure-emperical-examples" class="section level2">
+<h2>MS modeling procedure: Emperical Examples</h2>
+<p>The data comes from the original paper of Facebook Prophet model. It shows daily data for the number of events created on Facebook during the dates from 12/10/2007 to 01/20/2016. Weekly and yearly seasonality are strongly suspected. In this case study, MS will be evaluated 7 times for forecasting the following 200 steps. Three seasonality components are allowed in MS (r = 3).</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1"></a><span class="co"># parameters specification</span></span>
+<span id="cb16-2"><a href="#cb16-2"></a><span class="kw">load</span>(<span class="st">&#39;C:/Users/Tianyang/Documents/Long-short term/Rawcode/package6/tsms-master/tsms/data/prophet.RData&#39;</span>)</span>
+<span id="cb16-3"><a href="#cb16-3"></a>U=<span class="dv">600</span></span>
+<span id="cb16-4"><a href="#cb16-4"></a>p_range =<span class="st"> </span><span class="kw">c</span>(<span class="dv">0</span><span class="op">:</span><span class="dv">5</span>)</span>
+<span id="cb16-5"><a href="#cb16-5"></a>q_range =<span class="st"> </span><span class="kw">c</span>(<span class="dv">0</span><span class="op">:</span><span class="dv">5</span>)</span>
+<span id="cb16-6"><a href="#cb16-6"></a>r=<span class="dv">3</span></span>
+<span id="cb16-7"><a href="#cb16-7"></a>pred_t =<span class="st"> </span><span class="dv">200</span></span>
+<span id="cb16-8"><a href="#cb16-8"></a>rpt =<span class="st"> </span><span class="dv">7</span></span>
+<span id="cb16-9"><a href="#cb16-9"></a></span>
+<span id="cb16-10"><a href="#cb16-10"></a><span class="co"># fitting &amp; prediction</span></span>
+<span id="cb16-11"><a href="#cb16-11"></a>prediction.vec =<span class="st"> </span><span class="kw">rep</span>(<span class="dv">0</span>,pred_t<span class="op">*</span>rpt)</span>
+<span id="cb16-12"><a href="#cb16-12"></a>X.vec =<span class="st"> </span><span class="kw">tail</span>(prop<span class="op">$</span>y,pred_t<span class="op">*</span>rpt)</span>
+<span id="cb16-13"><a href="#cb16-13"></a></span>
+<span id="cb16-14"><a href="#cb16-14"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>rpt){</span>
+<span id="cb16-15"><a href="#cb16-15"></a>  X =<span class="st"> </span><span class="kw">as.matrix</span>(prop<span class="op">$</span>y[<span class="dv">1</span><span class="op">:</span>(<span class="kw">nrow</span>(prop)<span class="op">-</span>(rpt<span class="op">+</span><span class="dv">1</span><span class="op">-</span>i)<span class="op">*</span>pred_t)])</span>
+<span id="cb16-16"><a href="#cb16-16"></a>  result =<span class="st"> </span><span class="kw">MS</span>(<span class="kw">scale</span>(X,<span class="dt">scale=</span>F),<span class="dt">W=</span><span class="ot">NULL</span>,<span class="dt">U=</span>U,<span class="dt">p_range=</span>p_range,<span class="dt">q_range=</span>q_range,<span class="dt">r=</span>r,</span>
+<span id="cb16-17"><a href="#cb16-17"></a>                       <span class="dt">blur.out=</span><span class="kw">c</span>(<span class="dv">6</span>,<span class="dv">6</span>),<span class="dt">sar=</span>T,<span class="dt">sma=</span>T,<span class="dt">sfourier=</span>F,<span class="dt">order=</span><span class="dv">1</span>,<span class="dt">sfactor=</span>F,<span class="dt">pred_t=</span>pred_t,</span>
+<span id="cb16-18"><a href="#cb16-18"></a>                       <span class="dt">crit=</span><span class="st">&#39;BC&#39;</span>,<span class="dt">level=</span><span class="fl">0.05</span>,<span class="dt">multicore=</span>T)</span>
+<span id="cb16-19"><a href="#cb16-19"></a>  prediction =<span class="st"> </span>result<span class="op">$</span>prediction <span class="op">+</span><span class="st"> </span><span class="kw">mean</span>(X)</span>
+<span id="cb16-20"><a href="#cb16-20"></a>  prediction.vec[(<span class="dv">1</span><span class="op">+</span>(i<span class="dv">-1</span>)<span class="op">*</span>pred_t)<span class="op">:</span>(i<span class="op">*</span>pred_t)] =<span class="st"> </span><span class="kw">tail</span>(prediction,pred_t)</span>
+<span id="cb16-21"><a href="#cb16-21"></a>}</span>
+<span id="cb16-22"><a href="#cb16-22"></a></span>
+<span id="cb16-23"><a href="#cb16-23"></a><span class="co"># plotting</span></span>
+<span id="cb16-24"><a href="#cb16-24"></a><span class="kw">par</span>(<span class="dt">mar =</span> <span class="kw">c</span>(<span class="dv">4</span>,<span class="dv">3</span>,<span class="dv">1</span>,<span class="dv">1</span>) <span class="op">+</span><span class="st"> </span><span class="fl">0.1</span>,<span class="dt">mgp=</span><span class="kw">c</span>(<span class="dv">3</span>,<span class="fl">0.5</span>,<span class="dv">0</span>))</span>
+<span id="cb16-25"><a href="#cb16-25"></a><span class="kw">plot</span>(X.vec,<span class="dt">type=</span><span class="st">&#39;l&#39;</span>,<span class="dt">col=</span><span class="st">&#39;blue&#39;</span>,<span class="dt">ylab=</span><span class="st">&#39;&#39;</span>,<span class="dt">xlab=</span><span class="st">&#39;&#39;</span>,<span class="dt">xaxt=</span><span class="st">&#39;n&#39;</span>,<span class="dt">yaxt=</span><span class="st">&#39;n&#39;</span>,<span class="dt">bty=</span><span class="st">&#39;n&#39;</span>)</span>
+<span id="cb16-26"><a href="#cb16-26"></a><span class="kw">box</span>(<span class="dt">lwd=</span><span class="dv">2</span>)</span>
+<span id="cb16-27"><a href="#cb16-27"></a><span class="kw">axis</span>(<span class="dv">1</span>,<span class="dt">at=</span><span class="kw">seq</span>(<span class="dt">from=</span><span class="dv">0</span>,<span class="dt">to=</span><span class="dv">1400</span>,<span class="dt">by=</span><span class="dv">200</span>),<span class="dt">tck=</span><span class="fl">0.01</span>)</span>
+<span id="cb16-28"><a href="#cb16-28"></a><span class="kw">axis</span>(<span class="dv">2</span>,<span class="dt">at=</span><span class="kw">seq</span>(<span class="dt">from=</span><span class="dv">6</span>,<span class="dt">to=</span><span class="dv">13</span>,<span class="dt">by=</span><span class="dv">1</span>),<span class="dt">tck=</span><span class="fl">0.01</span>)</span>
+<span id="cb16-29"><a href="#cb16-29"></a><span class="kw">abline</span>(<span class="dt">v=</span><span class="kw">seq</span>(<span class="dt">from=</span><span class="dv">0</span>,<span class="dt">by=</span>pred_t,<span class="dt">length.out=</span>rpt),<span class="dt">lty=</span><span class="dv">2</span>)</span>
+<span id="cb16-30"><a href="#cb16-30"></a><span class="kw">lines</span>(prediction.vec,<span class="dt">col=</span><span class="st">&#39;red&#39;</span>)</span>
+<span id="cb16-31"><a href="#cb16-31"></a><span class="kw">legend</span>(<span class="st">&#39;topright&#39;</span>,<span class="dt">legend=</span><span class="kw">c</span>(<span class="st">&#39;Data&#39;</span>,<span class="st">&#39;MS&#39;</span>), <span class="dt">lwd =</span> <span class="dv">2</span></span>
+<span id="cb16-32"><a href="#cb16-32"></a>       ,<span class="dt">col=</span><span class="kw">c</span>(<span class="st">&#39;blue&#39;</span>,<span class="st">&#39;red&#39;</span>),<span class="dt">lty=</span><span class="kw">rep</span>(<span class="dv">1</span>,<span class="dv">2</span>),<span class="dt">cex=</span><span class="dv">1</span>)</span>
+<span id="cb16-33"><a href="#cb16-33"></a><span class="kw">mtext</span>(<span class="dt">text =</span> <span class="st">&quot;Time Index&quot;</span>,<span class="dt">side =</span> <span class="dv">1</span>,<span class="dt">line =</span> <span class="fl">1.8</span>)</span>
+<span id="cb16-34"><a href="#cb16-34"></a><span class="kw">mtext</span>(<span class="dt">text =</span> <span class="st">&#39;Value&#39;</span>,<span class="dt">side =</span> <span class="dv">2</span>, <span class="dt">line =</span> <span class="fl">1.8</span>)</span></code></pre></div>
+<p><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAASAAAAEgCAMAAAAjXV6yAAAAdVBMVEUAAAAAADoAAGYAAP8AOpAAZmYAZrY6AAA6ADo6AGY6ZmY6kNtmAABmADpmAGZmZgBmZmZmkJBmtrZmtv+QOgCQOjqQZgCQkGaQ2/+2ZgC225C2/7a2/9u2///bkDrb/9vb////AAD/tmb/25D//7b//9v///835MAYAAAACXBIWXMAAA7DAAAOwwHHb6hkAAAPtUlEQVR4nO3dCXfjthEAYO6OKze100tuumoadUHb+P8/scRJ3APwpjzzXtaxCPD4TA5A8FDHKYrR7b0CRw8CQoKAkCAgJAgICQJCgoCQICAkCAgJAkKCgJAgICQICAkCQoKAkCAgJAgICQJCgoCQmAPUPVYsDrT3Bi0eywPh85g2KTVt/VywApAmIqDMDGkPQmZIQMgMN+0iEBC2tJ2WcHwg0EtbfUFnzUEEhEwjIGQaASHTCAiZ9gBA6wYBITEb6KbO1a/eh/01Kvd1gZ5+Dv++P1+czz5etwQ6eA5SQLz/9mP8jICc0ECfbxeujrfrsDt13fDpzTvyHgsISuEX1UDy5+3C+X3YleQeZH4prtBJgYo+GaD79z8+fv0hstFVAtlfiit0UqCWcIDEj14cViYH9c4x9sVbMfXz3nXf/6P3IPsLLy2harl3k8z0H0FXPReQSNLygDKHmP2Fl5ZQs1yV1S783ECime/F+vf6ELO/8NISKpb7+fYi/xV7aBLoFDno/fnF7Dzdy/DPy/hLcYUqlmsS2rCgcwI5pxpDsvj24zbsS7ehH2R/KS2heg8SS7qcEqg2ZuQgzTLsjwSUjLvOZJ9vBNQyw5O0YrWxAtAGRHBqoOl1q+MhgNbMQWcAGhovG5sn6TMABY3XWPUcQJ9vurPcizEy9edObw+yKsVlXFJVTwOkTsZE51mfe93c4dfyCtUtt+/iIdzzAP1JjIzxj7/+TQ8pZv7ij9WKsVJ4JQeMmzjG+qffnn6mj4XkEoqfVsWeQEWfCKgXx9jt5SYPsUtuUQ8F1BAD0Psvf4gRaDnuIS5oJHP0Dv0gOEgOuny+XYcj7KcZex3S9tJJOl31NED8fhmOMDs4PcQtsRN9ZaD3X/77rx8CyAxB94ld6ABA3gWrLYE+3/4xpKHb2Ir1x9yDdgMaOokXNTitutP9OBKNrdCarRigH+CxEJDs6d7sqUYqR39ZoOogICROmYOAgMprRUCZWdsaBFReKwLKzNrWeAigXOO0QCtGQEgQEBKPAbR0DoKHyUHIY+HLAj3giwUWBSpVg8K00iR/fQgoW0+VOAEQmB+dKfkYQMVWDMIPCmGBeB6oUK85zggEnIDy8ahAxRyUBUrnIAX0YDloRyDw5tuFyygujYCQpREQsrQDAAEBxctxlw/BxOVbMR+oZhlxbR0ElKutg4BytXXsl4PG1ZiSg8JHdM+YgxYEAgMEZhYHA/p47Z5+3hK3PqSqHgHIO51ZH6j/9uP+9FM8r1gRI1BmpU4CpGvUAIlnC+/ho6ny8/hBhAMDpVZnGSDxdKoACu6/upvbjfz7jsZWLA/E80DJFTYNXx4osYiwFatuyCbvQc7djtx5ZpXLiWPVdYDgwEA6B939Bw+cV8n0yad9vhBQ8gY1dA+qzEHBtmZykCTqzIYfLAdlwu5RmRzUAOSUzALB6YDsI3VeamoHYvL/zZMUZwSyzxamH2YIq7YDic09M5CO1F3Wqar20nMaCGIgJoBYdsn2BUkHB9JPnWExzjEPZFsxiIDSNfQbpPJAYQ2/nVy9FVNRtwu1A7FHAfJPNdCnnktAuuWCKUBwVCD1MqUx0KeeCzkoD4TnoCRQnIPAdis3a8X85hx/6nkNIDgiUDaQp55bgVhmyecFSlfFgdgOQOlR7EMDwbGAIPg/XRsFyjVW2ahoxRgoIPXDB0rXsK1YDiis4QLpT5BWbCpQc9g5snogJv5RQAklDwjWBoITA0E9EMRA+Y6WKmF/tgOZw6ztECsAdXaDZQpSQAwF6vJAYQ6COAelgBI5aAqQeFXixX19ZylOC6RLTwAS13vEey7uYU8xXXU6kNiEcwJduXjPhfgPDwQINgOyhVYHEqPP4jXUSwOpmATEq4DYCBS9/SWqNgNInsbfXpY5xEC3YtqmCQjyQFENB0iuTBrIqyP/ndbM3y7hC0nzsQ1QuVdjgMa0jwKxWUAtMRGIl4HYRCCmhwmagaAWKPVVE8XwgaLtcHOQ2XegBmjYgi4PlM5BCqgqBwVA0ADU5V9flaxaAcT89IwDsREIWoCYnC+vAWITgdRNHMnXfqSjHUjuH5yXgdhEILY+EFe7Ud3tUzFQsCUGiHlATAMlN2NTIH1WC6w1SffxqZi5P8hPUssDsYWAErNeEIhHl33e//xDd5G8z3EglgVKb4XpBJjGr6EVw4CchSywB/n9RH13h7hz0buiWAfEYiCeBWIzgaAOSBQwcwfG5uYg3f5Ht57ZS88pINv9SQHlMkUEBBVA4AHl7INlTAPKtGJmD7rkvnikBMQsEGsA6vJAUQ6qA7LVzMHYDpTvB8mvmBKJyL+iGAB5w3ouEBtThDkpqAZiPBRKAY173rpA2Z50r247C664IkDOnmNWagoQqwYC/adIXtzOArG2HNQSKFDggwKNJduAxh11GlCwOZmK7TELKN4KthEQPAKQ1lFJvdSMVQONi9FnbgcAisIDis7FQiBmiF2gEMtNdeZnABRUsb2OLYFkW6OaHLNSzUDMBWLg7IHAx8JFIONZBcRGIOZvTrCVlRqpqjOAeALIDb/tdoGCHMScDS4BOTnIKb8hEDhA4AI5UBLIVm8BYvVAUAZyZv1YQMzM2r9ECuMSLNCYVkwpHgCZLLQjkJ86oRkogC0C+aaNQGx/IHUUcA/ITStmHvnIA8ESQLAP0LjealXsGINZ6SxQhOUBeZvuHohloHE5I5BK6Pa69R5AYIB4C1B8DsdMbygAcgo5QFACMpdOVKVtgHgCiCWBzPqKD9JAfCEgcEp5y1Gj9N6hGW6Ov5XNLmNVU7dzgcAHghSQ3JE6T8gDioQMEAQ5yPdxgJx9KMhB+wCNgzezgXgGiOWBRNenFchNXtsBQQqIZ4HcnT8JxJ3/ykAwGQj2AxIynQISnzvtUCsQSwI5XWIHiBeB1HRvDGA7IBYCcQWkb24oAtkdTm15x/RJuQHiDpA+knU2PgMQt7kmAtKTxxXV5yFgPzYrLnvcpo0DC8RDIKgAghjILue4QHZ9s0Aw3rGDAjHODJDMcGBdfCAWHsgAvtAiQLeuu8jLz96wfgWQmTwJSP9iUxNTQCqZMZYEAgvErIgHxNcAki9j6C7qLtgEUOcAqStZNqvKIsHog76ns3MOA6Z7BKZMlwSSdwx1DpDsCnMHCBwgW0xvJ6wGJC8cqu+byrxYwPw5DRBMAYIIyE7j5qySGSCmgWTpDJApFwLZq42wEJC8YKYuOqcvPXdMd389oHH2PhDUAXFnIrdXBCWQSUxB1yoBxMpAoBY7F6hqD1JpR92UCqwFCJJATg0m97oCEPeB/H6UC8Q8IF1jyRzkvMUjAjIHNNgrT4sBQQaIhUAdDgQ+ECwChLdiPhD3190Ps1Jg8gOYjDICBX0XVd4uIA8EAZBXZk2gdHhAtknAgLgBMokKRttFgHgINHbh9QoeAij/0JYHJEdu2oDY+YC6CKg4e3WAQWeAxqqQrAYOENM9gDRQ5/QzAyD1h1Bd1KTPqkB2fQHMn7gwe/1H7EwV+S9zfTAgpntFLChkni6OgFgExEOfIwHJ05EIiOeAzEGp+i12d60H0nvqSYFYG9AYMZB9Pj0akjwIENQBcR/IyLqpuRIoKHRYoHG8y47llAOc4cAkUFBcbwkCxMcxJ4iJONiGYGcg1gwEbUBjg+8X4h5Q1JQ5J16WaTsgPgPIvNwMA9IbbS8cB12tdiDu+qybg7gF4j5QTQ7i/l8yrlYH5FQ7NBB3ffKzF0B2U8GOJaarBUCAAfERyN1P+d5A3BuiQmYvzthXB3JuojCjiXq6HWeLNyczz/ZYCCg+wBJANlE3A0EOiJ8ECKYBRVW8as7edgQgES5QXXU99Jg4wNJlQ6ByBVXYSdY82lW3BdIXQTmv9RGhLxbiQHwlIL45UEUnyA1QL8BtAOIzgdwyfCsg9TMJVJh9J9eP8RRQbpSEl4E6t7Db8rFoQIWfCIi3AgXXk1PVICKCKK9vDsTbgXgDkLnQOhEo0/AtAfTxmn4ZTAwUj9ajQHota4DMJHmPaH6WZo4uEM8COZVnAP3lOfWygeWAovNU7MisBtI9Ip7tOjmVZwC98Lu4blieYxIIiwwQUiMH5JXbFkg+t3oJ5+h3FfkEIBP1QLJ0BRC3QGb8DOkZzAXi0UsrltiDTLQBcWRbdRkfCKu0AFBujjNykIm2HJTb1tTVIk5A2VmCPiddGwidYzA2XTn7OUCZQ5KAypMQICS+HJCZqwZC0/rqZ/MitmrFWuZ6NCDsZcXpWBGIq2tMBFSaezjSkYqtchA/UA6yc4fsFzQ5lQ8NVD+NgFaoRkDINALCpoVvtEhW3qQVm9aGrR41jeSXBqqJTYDOHJvkoJbZb5mDaraTgJAgIGTaGkAPFgSExNJAXyMICAkCQoKAkCAgJAgICQJCgoCQICAkCAgJAkKCgJAgICRmA/Vdy3eSye+6dWtVVb93+r0qLdXUV33Kd7K8tNZ1Yi6QeK9Q37C8Xn6zkq1VVV18M0wvhFqqfbyK+yk/34ZS8hbdtkWOMRNIvVHI+9KoYny8CiBbq6r659slKF1RTd9wqr6V+f79j7ZFOjETyK5AZfn7028DkK1VVd0CNVTruxfndWLDDtO2SCfmAonvZgu/sK1YXOQgW6uuujnE2qo5k29OlcY1ngukDubaQ1rs3gLI1qqsrtNqW7XRYNidmhdpY1Mg+TK0diDxzYHvz60baYF6k6P3AGraYWXh9kNsTB+TDrFetvJ7HWJNKe+urx5c2zKm/Zs3VlOT76oXtFeSbm001R7U1uaqTepbm2oFdNdv7turmW/uKKqedFuvzeSgtmq96geZxyh26ijK42bCqYatVVX9Zk4XWqpJIH1Ui7Jti7RBJ6tIEBASBIQEASFBQEgQEBIEhAQBIUFASBAQEgSEBAEhQUBI7Ar08aqH0L7//notlItGJ5oGWObF7nuQGgItBwEhQUDy+4Pen/85HHIv78/qQvzdjJJJj49XMVF//u3fegRMFBDDy7n3rywQhwKS19GH7RXbLK4WmgFTCSQmDv+J8de+07+IAmKQ+Z5+y9oScSigF27+uerXXqmLDxJIfa5G8G/6A1mg//77r+sdcYcCunL7j8oyikMBXWUp/TVe5gKgLHBLvGBtsTgskLmGJso4QHcLNBbou1IfYWYcFshtp/J7kIjPt79XXwZsj6MCfbg9RwdIXxjVH8i4P/3vbbVG7LBAspESyViUcYD0vTC6FVPZ+tpwqb05Dgskuznm/gMHyO8HDQXUtezLWuu3O9DRg4CQICAkCAgJAkKCgJAgICQICAkCQoKAkCAgJAgICQJCgoCQICAkCAgJAkKCgJAgICQICAkCQoKAkCAgJAgICQJCgoCQICAkCAiJ/wMv7qCHsDq5wQAAAABJRU5ErkJggg==" /><!-- --></p>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
