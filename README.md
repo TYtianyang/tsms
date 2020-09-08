@@ -6,7 +6,7 @@ Unlike most of the methods for multiple seasonality, MS doesn't require pre-spec
 More details can be referred to https://arxiv.org/abs/2008.12340. Feel free to contact the authors: Tianyang Xie at xie00039@umn.edu, Jie Ding at dingj@umn.edu .
 
 ## Getting Started
-
+```{r}
 install.packages("devtools")
 
 library("devtools")
@@ -14,7 +14,7 @@ library("devtools")
 Sys.setenv("R_REMOTES_NO_ERRORS_FROM_WARNINGS" = "true")
 
 install_github('TYtianyang/tsms')
-
+```
 
 
 __Note: For R version > 4.0.0 user, we avoid auto-converting warnings to error issues from older packages (e.g. gridExtra) by the the command:__ 
@@ -25,4 +25,6 @@ __Sys.setenv("R_REMOTES_NO_ERRORS_FROM_WARNINGS" = "true")__
 
 To see the available function to use, type 
 
+```{r}
 ls("package:tsms")
+```
