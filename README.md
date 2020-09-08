@@ -17,9 +17,9 @@ install_github('TYtianyang/tsms')
 
 
 
-_Note: For R version > 4.0.0 user, we avoid auto-converting warnings to error issues from older packages (e.g. gridExtra) by the the command:_ 
+__Note: For R version > 4.0.0 user, we avoid auto-converting warnings to error issues from older packages (e.g. gridExtra) by the the command:__ 
 
-Sys.setenv("R_REMOTES_NO_ERRORS_FROM_WARNINGS" = "true")
+__Sys.setenv("R_REMOTES_NO_ERRORS_FROM_WARNINGS" = "true")__
 
 ## Using This Package
 
