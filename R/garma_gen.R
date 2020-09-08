@@ -65,6 +65,7 @@ garma.gen = function(n,U,p,q,S1=NULL,S2=NULL,phi=NULL,psi=NULL,tau1=NULL,tau2=NU
     }
     stop = max(abs(X[(n-10):n,1]))
   }
+  X = as.vector(X)
   obj = list(X=X,p=p,q=q,S1=S1,S2=S2,beta=beta)
   return(obj)
 }
