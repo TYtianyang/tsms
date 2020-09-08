@@ -19,10 +19,5 @@ Co-author: Jie Ding <dingj@umn.edu>
 \references{
   T. Xie, J. Ding, "Forecasting with Multiple Seasonality ," submitted to IEEE Big Data 2020.
 }
-\link{
-  garma.fit
-  garma.pred
-  garma.gen
-  MS
-}
+
 
