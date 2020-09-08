@@ -28,3 +28,5 @@ To see the available function to use, type
 ```{r}
 ls("package:tsms")
 ```
+
+More details could be found in the [user guide](https://github.com/TYtianyang/tsms/blob/master/vignettes/user_guide.pdf)
