@@ -31,4 +31,4 @@ ls("package:tsms")
 
 For explicit usage of each function, please refer to [Explore Generalized ARMA with TSMS](https://github.com/TYtianyang/tsms/blob/master/vignettes/explore_generalized_arma_with_tsms.pdf)
 
-For a MS procedure real-data example, please check [A MS Example](https://github.com/TYtianyang/tsms/blob/master/vignettes/ms_example.pdf)
+For a MS procedure real-data example, please check [MS: Facebook Events Forecast](https://github.com/TYtianyang/tsms/blob/master/vignettes/ms_example.pdf)
