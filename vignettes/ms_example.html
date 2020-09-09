@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<meta name="author" content="Tianyang Xie, Jie Ding" />
+
+<meta name="date" content="2020-09-04" />
+
+<title>A MS Example</title>
+
+<script>// Hide empty <a> tag within highlighted CodeBlock for screen reader accessibility (see https://github.com/jgm/pandoc/issues/6352#issuecomment-626106786) -->
+// v0.0.1
+// Written by JooYoung Seo (jooyoung@psu.edu) and Atsushi Yasumoto on June 1st, 2020.
+
+document.addEventListener('DOMContentLoaded', function() {
+  const codeList = document.getElementsByClassName("sourceCode");
+  for (var i = 0; i < codeList.length; i++) {
+    var linkList = codeList[i].getElementsByTagName('a');
+    for (var j = 0; j < linkList.length; j++) {
+      if (linkList[j].innerHTML === "") {
+        linkList[j].setAttribute('aria-hidden', 'true');
+      }
+    }
+  }
+});
+</script>
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css" data-origin="pandoc">
+code.sourceCode > span { display: inline-block; line-height: 1.25; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">A MS Example</h1>
+<h4 class="author">Tianyang Xie, Jie Ding</h4>
+<h4 class="date">09/04/2020</h4>
+
+
+
+<p>In this short vignette, we will present a real data example of MS’ usage. We first load the ‘tsms’ package.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">library</span>(tsms)</span>
+<span id="cb1-2"><a href="#cb1-2"></a><span class="co">#&gt; Loading required package: gridExtra</span></span>
+<span id="cb1-3"><a href="#cb1-3"></a><span class="co">#&gt; Loading required package: parallel</span></span></code></pre></div>
+<p>The data set ‘prop’ comes from the example in the original paper of Facebook ‘Prophet’ model. It shows the daily counts for the number of events created on Facebook during the dates from 12/10/2007 to 01/20/2016. Weekly and yearly seasonality are strongly suspected, as part of the data shows below. And say, our primary our task is to forecast the 300 steps after the time index 2540.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a><span class="kw">load</span>(<span class="st">&#39;C:/Users/Tianyang/Documents/Long-short term/Rawcode/package_principle/data/prophet.RData&#39;</span>)</span>
+<span id="cb2-2"><a href="#cb2-2"></a><span class="kw">plot</span>(prop<span class="op">$</span>y,<span class="dt">type=</span><span class="st">&#39;l&#39;</span>,<span class="dt">xlim=</span><span class="kw">c</span>(<span class="dv">2400</span>,<span class="dv">2900</span>),<span class="dt">main=</span><span class="st">&#39;Facebook Event Data&#39;</span>,<span class="dt">ylab=</span><span class="st">&#39;Counts&#39;</span>,<span class="dt">xlab=</span><span class="st">&#39;Time Index&#39;</span>)</span>
+<span id="cb2-3"><a href="#cb2-3"></a><span class="kw">abline</span>(<span class="dt">v=</span><span class="dv">2540</span>,<span class="dt">lty=</span><span class="dv">2</span>)</span></code></pre></div>
+<p><img src="data:image/png;base64,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" /><!-- --> To be able to use the MS modeling procedure, we first need to extract the trend or the intercept from the series, because the current version of MS can only deal with ‘detrended’ data.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a>X =<span class="st"> </span>prop<span class="op">$</span>y</span>
+<span id="cb3-2"><a href="#cb3-2"></a>intercept =<span class="st"> </span><span class="kw">mean</span>(X[<span class="dv">1</span><span class="op">:</span><span class="dv">2540</span>])</span>
+<span id="cb3-3"><a href="#cb3-3"></a>train =<span class="st"> </span>(X <span class="op">-</span><span class="st"> </span>intercept)[<span class="dv">1</span><span class="op">:</span><span class="dv">2540</span>]</span></code></pre></div>
+<p>To accommodate the multiple seasonality effects and perform a forecasting, we can employ the MS modeling procedure by setting up the number of potential seasonality terms to be 3, by ‘r=3’. We also allow the maximum lag order of regular AR and MA components to be up to 5,by ‘p_range=c(0:5);q_range=c(0:5)’, so that the procedure can select from a enough set of parameters’ combination.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a>U=<span class="dv">600</span></span>
+<span id="cb4-2"><a href="#cb4-2"></a>p_range =<span class="st"> </span><span class="kw">c</span>(<span class="dv">0</span><span class="op">:</span><span class="dv">5</span>)</span>
+<span id="cb4-3"><a href="#cb4-3"></a>q_range =<span class="st"> </span><span class="kw">c</span>(<span class="dv">0</span><span class="op">:</span><span class="dv">5</span>)</span>
+<span id="cb4-4"><a href="#cb4-4"></a>r=<span class="dv">3</span></span>
+<span id="cb4-5"><a href="#cb4-5"></a>pred_t =<span class="st"> </span><span class="dv">300</span></span>
+<span id="cb4-6"><a href="#cb4-6"></a></span>
+<span id="cb4-7"><a href="#cb4-7"></a>result =<span class="st"> </span><span class="kw">MS</span>(train,<span class="dt">U=</span>U,<span class="dt">p_range=</span>p_range,<span class="dt">q_range=</span>q_range,<span class="dt">r=</span>r,<span class="dt">pred_t=</span>pred_t)</span>
+<span id="cb4-8"><a href="#cb4-8"></a></span>
+<span id="cb4-9"><a href="#cb4-9"></a><span class="kw">plot</span>(X,<span class="dt">type=</span><span class="st">&#39;l&#39;</span>,<span class="dt">xlim=</span><span class="kw">c</span>(<span class="dv">2400</span>,<span class="dv">2900</span>),<span class="dt">main=</span><span class="st">&#39;Facebook Event Data&#39;</span>,<span class="dt">ylab=</span><span class="st">&#39;Counts&#39;</span>,<span class="dt">xlab=</span><span class="st">&#39;Time Index&#39;</span>)</span>
+<span id="cb4-10"><a href="#cb4-10"></a><span class="kw">abline</span>(<span class="dt">v=</span><span class="dv">2540</span>,<span class="dt">lty=</span><span class="dv">2</span>)</span>
+<span id="cb4-11"><a href="#cb4-11"></a><span class="kw">lines</span>(result<span class="op">$</span>prediction <span class="op">+</span><span class="st"> </span>intercept,<span class="dt">col=</span><span class="st">&#39;red&#39;</span>)</span></code></pre></div>
+<p><img src="data:image/png;base64,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" /><!-- --> We can further improve the flexibility of the procedure by further increasing the bandwidth of each seasonality term. By setting ‘blur.out=c(6,6)’, we allow the each seasonality period includes the AR and MA components with lag order range from lag-6 to lag+6. Larger value in both elements in ‘blur.out’ provides more fitting power, but also absorbs more risk of overfitting.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a>result =<span class="st"> </span><span class="kw">MS</span>(train,<span class="dt">U=</span>U,<span class="dt">p_range=</span>p_range,<span class="dt">q_range=</span>q_range,<span class="dt">r=</span>r,<span class="dt">pred_t=</span>pred_t,<span class="dt">blur.out=</span><span class="kw">c</span>(<span class="dv">6</span>,<span class="dv">6</span>))</span>
+<span id="cb5-2"><a href="#cb5-2"></a></span>
+<span id="cb5-3"><a href="#cb5-3"></a><span class="kw">plot</span>(X,<span class="dt">type=</span><span class="st">&#39;l&#39;</span>,<span class="dt">xlim=</span><span class="kw">c</span>(<span class="dv">2400</span>,<span class="dv">2900</span>),<span class="dt">main=</span><span class="st">&#39;Facebook Event Data&#39;</span>,<span class="dt">ylab=</span><span class="st">&#39;Counts&#39;</span>,<span class="dt">xlab=</span><span class="st">&#39;Time Index&#39;</span>)</span>
+<span id="cb5-4"><a href="#cb5-4"></a><span class="kw">abline</span>(<span class="dt">v=</span><span class="dv">2540</span>,<span class="dt">lty=</span><span class="dv">2</span>)</span>
+<span id="cb5-5"><a href="#cb5-5"></a><span class="kw">lines</span>(result<span class="op">$</span>prediction <span class="op">+</span><span class="st"> </span>intercept,<span class="dt">col=</span><span class="st">&#39;red&#39;</span>)</span></code></pre></div>
+<p><img src="data:image/png;base64,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" /><!-- --></p>
+<p>In the end, to present the performance of the MS procedure, we evaluate it on a rolling basis, in which the MS will be evaluated 7 times for forecasting the following 200 steps.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a><span class="co"># parameters specification</span></span>
+<span id="cb6-2"><a href="#cb6-2"></a>U=<span class="dv">600</span></span>
+<span id="cb6-3"><a href="#cb6-3"></a>p_range =<span class="st"> </span><span class="kw">c</span>(<span class="dv">0</span><span class="op">:</span><span class="dv">5</span>)</span>
+<span id="cb6-4"><a href="#cb6-4"></a>q_range =<span class="st"> </span><span class="kw">c</span>(<span class="dv">0</span><span class="op">:</span><span class="dv">5</span>)</span>
+<span id="cb6-5"><a href="#cb6-5"></a>r=<span class="dv">3</span></span>
+<span id="cb6-6"><a href="#cb6-6"></a>pred_t =<span class="st"> </span><span class="dv">200</span></span>
+<span id="cb6-7"><a href="#cb6-7"></a>rpt =<span class="st"> </span><span class="dv">7</span></span>
+<span id="cb6-8"><a href="#cb6-8"></a></span>
+<span id="cb6-9"><a href="#cb6-9"></a><span class="co"># fitting &amp; prediction</span></span>
+<span id="cb6-10"><a href="#cb6-10"></a>prediction.vec =<span class="st"> </span><span class="kw">rep</span>(<span class="dv">0</span>,pred_t<span class="op">*</span>rpt)</span>
+<span id="cb6-11"><a href="#cb6-11"></a>X.vec =<span class="st"> </span><span class="kw">tail</span>(prop<span class="op">$</span>y,pred_t<span class="op">*</span>rpt)</span>
+<span id="cb6-12"><a href="#cb6-12"></a></span>
+<span id="cb6-13"><a href="#cb6-13"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>rpt){</span>
+<span id="cb6-14"><a href="#cb6-14"></a>  X =<span class="st"> </span><span class="kw">as.matrix</span>(prop<span class="op">$</span>y[<span class="dv">1</span><span class="op">:</span>(<span class="kw">nrow</span>(prop)<span class="op">-</span>(rpt<span class="op">+</span><span class="dv">1</span><span class="op">-</span>i)<span class="op">*</span>pred_t)])</span>
+<span id="cb6-15"><a href="#cb6-15"></a>  result =<span class="st"> </span><span class="kw">MS</span>(<span class="kw">scale</span>(X,<span class="dt">scale=</span>F),<span class="dt">U=</span>U,<span class="dt">p_range=</span>p_range,<span class="dt">q_range=</span>q_range,<span class="dt">r=</span>r,</span>
+<span id="cb6-16"><a href="#cb6-16"></a>                       <span class="dt">blur.out=</span><span class="kw">c</span>(<span class="dv">6</span>,<span class="dv">6</span>),<span class="dt">pred_t=</span>pred_t)</span>
+<span id="cb6-17"><a href="#cb6-17"></a>  prediction =<span class="st"> </span>result<span class="op">$</span>prediction <span class="op">+</span><span class="st"> </span><span class="kw">mean</span>(X)</span>
+<span id="cb6-18"><a href="#cb6-18"></a>  prediction.vec[(<span class="dv">1</span><span class="op">+</span>(i<span class="dv">-1</span>)<span class="op">*</span>pred_t)<span class="op">:</span>(i<span class="op">*</span>pred_t)] =<span class="st"> </span><span class="kw">tail</span>(prediction,pred_t)</span>
+<span id="cb6-19"><a href="#cb6-19"></a>}</span>
+<span id="cb6-20"><a href="#cb6-20"></a></span>
+<span id="cb6-21"><a href="#cb6-21"></a><span class="co"># plotting</span></span>
+<span id="cb6-22"><a href="#cb6-22"></a><span class="kw">par</span>(<span class="dt">mar =</span> <span class="kw">c</span>(<span class="dv">4</span>,<span class="dv">3</span>,<span class="dv">1</span>,<span class="dv">1</span>) <span class="op">+</span><span class="st"> </span><span class="fl">0.1</span>,<span class="dt">mgp=</span><span class="kw">c</span>(<span class="dv">3</span>,<span class="fl">0.5</span>,<span class="dv">0</span>))</span>
+<span id="cb6-23"><a href="#cb6-23"></a><span class="kw">plot</span>(X.vec,<span class="dt">type=</span><span class="st">&#39;l&#39;</span>,<span class="dt">col=</span><span class="st">&#39;blue&#39;</span>,<span class="dt">ylab=</span><span class="st">&#39;&#39;</span>,<span class="dt">xlab=</span><span class="st">&#39;&#39;</span>,<span class="dt">xaxt=</span><span class="st">&#39;n&#39;</span>,<span class="dt">yaxt=</span><span class="st">&#39;n&#39;</span>,<span class="dt">bty=</span><span class="st">&#39;n&#39;</span>)</span>
+<span id="cb6-24"><a href="#cb6-24"></a><span class="kw">box</span>(<span class="dt">lwd=</span><span class="dv">2</span>)</span>
+<span id="cb6-25"><a href="#cb6-25"></a><span class="kw">axis</span>(<span class="dv">1</span>,<span class="dt">at=</span><span class="kw">seq</span>(<span class="dt">from=</span><span class="dv">0</span>,<span class="dt">to=</span><span class="dv">1400</span>,<span class="dt">by=</span><span class="dv">200</span>),<span class="dt">tck=</span><span class="fl">0.01</span>)</span>
+<span id="cb6-26"><a href="#cb6-26"></a><span class="kw">axis</span>(<span class="dv">2</span>,<span class="dt">at=</span><span class="kw">seq</span>(<span class="dt">from=</span><span class="dv">6</span>,<span class="dt">to=</span><span class="dv">13</span>,<span class="dt">by=</span><span class="dv">1</span>),<span class="dt">tck=</span><span class="fl">0.01</span>)</span>
+<span id="cb6-27"><a href="#cb6-27"></a><span class="kw">abline</span>(<span class="dt">v=</span><span class="kw">seq</span>(<span class="dt">from=</span><span class="dv">0</span>,<span class="dt">by=</span>pred_t,<span class="dt">length.out=</span>rpt),<span class="dt">lty=</span><span class="dv">2</span>)</span>
+<span id="cb6-28"><a href="#cb6-28"></a><span class="kw">lines</span>(prediction.vec,<span class="dt">col=</span><span class="st">&#39;red&#39;</span>)</span>
+<span id="cb6-29"><a href="#cb6-29"></a><span class="kw">legend</span>(<span class="st">&#39;topright&#39;</span>,<span class="dt">legend=</span><span class="kw">c</span>(<span class="st">&#39;Data&#39;</span>,<span class="st">&#39;MS&#39;</span>), <span class="dt">lwd =</span> <span class="dv">2</span></span>
+<span id="cb6-30"><a href="#cb6-30"></a>       ,<span class="dt">col=</span><span class="kw">c</span>(<span class="st">&#39;blue&#39;</span>,<span class="st">&#39;red&#39;</span>),<span class="dt">lty=</span><span class="kw">rep</span>(<span class="dv">1</span>,<span class="dv">2</span>),<span class="dt">cex=</span><span class="dv">1</span>)</span>
+<span id="cb6-31"><a href="#cb6-31"></a><span class="kw">mtext</span>(<span class="dt">text =</span> <span class="st">&quot;Time Index&quot;</span>,<span class="dt">side =</span> <span class="dv">1</span>,<span class="dt">line =</span> <span class="fl">1.8</span>)</span>
+<span id="cb6-32"><a href="#cb6-32"></a><span class="kw">mtext</span>(<span class="dt">text =</span> <span class="st">&#39;Value&#39;</span>,<span class="dt">side =</span> <span class="dv">2</span>, <span class="dt">line =</span> <span class="fl">1.8</span>)</span></code></pre></div>
+<p><img src="data:image/png;base64,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" /><!-- --></p>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
